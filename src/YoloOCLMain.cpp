@@ -127,7 +127,7 @@ int main(int argc, char* argv[]) {
 	sprintf(labelsFile, "%s\\coco.names", currentDir.c_str());
 	sprintf(configFile, "%s\\tiny-yolo.cfg", currentDir.c_str());
 	sprintf(weightsFile, "%s\\tiny-yolo.weights", currentDir.c_str());
-#elif __linux__
+#else
 
 	strcpy(labelsFile, "coco.names");
 	strcpy(configFile, "tiny-yolo.cfg");

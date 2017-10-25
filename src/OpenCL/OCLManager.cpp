@@ -28,7 +28,7 @@ string ExePath() {
 	return string(buffer).substr(0, pos);
 }
 
-#elif __linux__
+#else
 
 string ExePath() {
 
@@ -80,7 +80,7 @@ int OCLManager::Initialize() {
 	
 #ifdef WIN32
 	file = ExePath() + "\\DeepNNFP32.cl";
-#elif __linux__
+#else
 	file = "DeepNNFP32.cl";
 #endif
 

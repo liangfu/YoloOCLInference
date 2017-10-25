@@ -15,7 +15,7 @@ limitations under the License.*/
 
 #include "YoloOCLDNN.h"
 
-#ifdef __linux__
+#ifndef WIN32
 #include <sys/stat.h>
 #include <unistd.h>
 #include <dirent.h>
@@ -30,7 +30,7 @@ void WaitMilliSecs(int mSecs) {
 
 #ifdef WIN32
 	::Sleep(mSecs);
-#elif __linux__
+#else
 	usleep(mSecs * 1000);
 #endif
 
@@ -70,7 +70,7 @@ void EnumerateFilesInDirectory(string srcFolder,  vector<string> &fileNames, vec
 	}
 }
 
-#elif __linux__
+#else
 
 bool IsFileAnImage(const std::string& FileName) {
 
@@ -1503,7 +1503,7 @@ DWORD WINAPI ProcessVideoInput(LPVOID lpParameter) {
 
 }
 
-#elif __linux__
+#else
 
 void* ProcessBatchInput(void *ptr) {
 	
@@ -1530,7 +1530,7 @@ void YOLONeuralNet::ProcessVideo(char *srcVideoPath) {
 	
 	HANDLE procThread = CreateThread(NULL, 0, ProcessVideoInput, (LPVOID)this, 0, NULL);
 
-#elif __linux__
+#else
 
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
@@ -1557,7 +1557,7 @@ void YOLONeuralNet::ProcessVideo(char *srcVideoPath) {
 
 	sprintf(outFolder, "%s\\output", ExePath().c_str());
 	CreateDirectory(outFolder, NULL);
-#elif __linux__
+#else
 
 	strcpy(outFolder, "output");
 	const int dirErr = mkdir(outFolder, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
@@ -1665,7 +1665,7 @@ void YOLONeuralNet::ProcessVideo(char *srcVideoPath) {
 		}
 	}
 
-#ifdef __linux__
+#ifndef WIN32
 
 	pthread_join(m_ProcThread, &pthreadStatus);
 #endif
@@ -1709,7 +1709,7 @@ void YOLONeuralNet::ProcessImageBatch(char *srcFolder) {
 
 	HANDLE procThread = CreateThread(NULL, 0, ProcessBatchInput, (LPVOID)this, 0, NULL);
 
-#elif __linux__
+#else
 
 	pthread_attr_t attr;
 	pthread_attr_init(&attr);
@@ -1738,8 +1738,7 @@ void YOLONeuralNet::ProcessImageBatch(char *srcFolder) {
 
 	sprintf(outFolder, "%s\\output", ExePath().c_str());
 	CreateDirectory(outFolder, NULL);
-#elif __linux__
-
+#else
 	strcpy(outFolder, "output");
 	const int dirErr = mkdir(outFolder, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	if (dirErr == -1)
@@ -1838,8 +1837,8 @@ void YOLONeuralNet::ProcessImageBatch(char *srcFolder) {
 		}
 	}
 
-#ifdef __linux__
-
+#ifndef WIN32
+      
 	pthread_join(m_ProcThread, &pthreadStatus);
 #endif
 
@@ -1881,8 +1880,7 @@ void YOLONeuralNet::ProcessSingleImage(char* inputFile) {
 
 	sprintf(outFolder, "%s\\output", ExePath().c_str());
 	CreateDirectory(outFolder, NULL);
-#elif __linux__
-
+#else
 	strcpy(outFolder, "output");
 	const int dirErr = mkdir(outFolder, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 	if (dirErr == -1) 

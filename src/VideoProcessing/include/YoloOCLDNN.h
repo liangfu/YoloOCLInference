@@ -35,7 +35,7 @@ limitations under the License.*/
 #include "opencv2/highgui/highgui_c.h"
 #include "opencv2/opencv.hpp"
 
-#ifdef __linux__
+#ifndef WIN32
 #include <pthread.h>
 #endif
 
@@ -261,7 +261,7 @@ private:
 	float						m_DetThreshold;
 	float						m_NMSOverlap;
 
-#ifdef __linux__
+#ifndef WIN32
 	pthread_t 			m_ProcThread;
 #endif
 

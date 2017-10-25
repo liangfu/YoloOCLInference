@@ -87,7 +87,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${CFLAGS}")
 # ==================================================================================================
 
 # Package scripts location
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${YoloOCLInference_SOURCE_DIR}/cmake/Modules/")
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${YoloOCLInference_SOURCE_DIR}/cmake/")
 
 # Requires OpenCL. It is found through the included "FindOpenCL.cmake" in CMAKE_MODULE_PATH.
 if(MSVC)
@@ -156,6 +156,11 @@ if(!MSVC)
 	find_package(FFmpeg REQUIRED)
 endif()
 
+find_package(OpenMP REQUIRED)
+set(OpenMP_INCLUDE_DIRS /usr/local/include)
+message(STATUS "OpenMP library status:")
+message(STATUS "    include path: ${OpenMP_INCLUDE_DIRS}")
+
 # ==================================================================================================
 
 # Gathers all source-files (required for the compiler) and header-files (for IDEs only)
@@ -190,10 +195,10 @@ set(HEADERS  # such that they can be discovered by IDEs such as CLion and Visual
 )
 
 if(MSVC)
-	include_directories(3rdparty/opencv/include/ 3rdparty/ffmpeg/include 3rdparty/clblast/include/ 3rdparty/cairo/include/ src/OpenCL/include/ src/Utilities/include/ src/VideoProcessing/include/ ${OpenCL_INCLUDE_DIRS})
+	include_directories(3rdparty/opencv/include/ 3rdparty/ffmpeg/include 3rdparty/clblast/include/ 3rdparty/cairo/include/ src/OpenCL/include/ src/Utilities/include/ src/VideoProcessing/include/ ${OpenCL_INCLUDE_DIRS} ${OpenMP_INCLUDE_DIRS})
 	link_directories(3rdparty/opencv/lib/ 3rdparty/ffmpeg/lib 3rdparty/clblast/Release 3rdparty/cairo/lib/)
 else()
-	include_directories(/usr/include/cairo src/OpenCL/include/ src/Utilities/include/ src/VideoProcessing/include/ ${OPENCL_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
+	include_directories(/usr/include/cairo /usr/local/include/cairo src/OpenCL/include/ src/Utilities/include/ src/VideoProcessing/include/ ${OPENCL_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS} ${OpenMP_INCLUDE_DIRS})
 endif()
 
 # Creates and links the library
